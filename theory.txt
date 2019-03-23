@@ -1,0 +1,18 @@
+Урок 55. Установка фреймворка
+
+    Зміна налаштувань проекту
+        APP_URL=http://localhost => APP_URL=http://corporate.loc
+        DB_HOST=127.0.0.1 => DB_HOST=localhost
+        DB_DATABASE=homestead => DB_DATABASE=corporate
+        DB_USERNAME=homestead => DB_USERNAME=mysql
+        DB_PASSWORD=secret => DB_PASSWORD=mysql
+        MAIL_DRIVER=smtp => MAIL_DRIVER=mail
+        MAIL_HOST=mailtrap.io => MAIL_HOST=
+        MAIL_PORT=2525 => MAIL_PORT=
+        MAIL_USERNAME=null => MAIL_USERNAME=
+        MAIL_PASSWORD=null => MAIL_PASSWORD=
+        MAIL_ENCRYPTION=null => MAIL_ENCRYPTION=
+
+        THEME=pink
+
+    config > settings.php - новий файл налаштувань
