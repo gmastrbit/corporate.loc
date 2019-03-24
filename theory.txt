@@ -16,3 +16,13 @@
         THEME=pink
 
     config > settings.php - новий файл налаштувань
+
+Урок 56. Створення БД
+
+    Визначення власного простору імен
+        php artisan app:name Corp
+
+    Формуємо міграції
+        php artisan make:migration CreateArticlesTable --create=articles - дана міграція створить у БД таблицю articles
+
+    php artisan make:auth
