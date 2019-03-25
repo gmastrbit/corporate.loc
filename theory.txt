@@ -1,4 +1,4 @@
-Урок 55. Установка фреймворка
+﻿Урок 55. Установка фреймворка
 
     Зміна налаштувань проекту
         APP_URL=http://localhost => APP_URL=http://corporate.loc
@@ -26,3 +26,5 @@
         php artisan make:migration CreateArticlesTable --create=articles - дана міграція створить у БД таблицю articles
 
     php artisan make:auth
+
+Урок 57. 
