@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 
 use Corp\Http\Requests;
 
+use Corp\Repositories\MenusRepository;
+
 class IndexController extends SiteController
 {
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct(new \Corp\Repositories\MenusRepository(new \Corp\Menu));
 
         // визначає, де буде сайдбар
         $this->bar = 'right';
