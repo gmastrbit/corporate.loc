@@ -57,3 +57,22 @@
     $menu->roots() повертає лише батьківські пункти меню
     $item->children() повертає лише дочрні пункти меню
 
+Урок 60. Створення слайдера
+
+    Створення slider.blade.php та винесення логіки в контролер
+
+    php artisan make:model Slider
+
+    Створення власної директиви Blade
+        @set($i,1)
+
+
+    app > Providers > AppServiceProvider.php
+         public function boot()
+            {
+                // створення власної директиви
+                Blade::directive('set', function ($exp) {
+                    list($name, $val) = explode(',', $exp);
+                    return "<?php $name = $val ?>";
+                });
+            }

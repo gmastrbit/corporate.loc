@@ -2,6 +2,10 @@
 
 namespace Corp\Http\Controllers;
 
+use Config;
+
+use Corp\Repositories\SlidersRepository;
+
 use Illuminate\Http\Request;
 
 use Corp\Http\Requests;
@@ -11,9 +15,11 @@ use Corp\Repositories\MenusRepository;
 class IndexController extends SiteController
 {
 
-    public function __construct()
+    public function __construct(SlidersRepository $s_rep)
     {
         parent::__construct(new \Corp\Repositories\MenusRepository(new \Corp\Menu));
+
+        $this->s_rep = $s_rep;
 
         // визначає, де буде сайдбар
         $this->bar = 'right';
@@ -28,9 +34,29 @@ class IndexController extends SiteController
      */
     public function index()
     {
+        // певні доопрацювання будуть визначатися в даному методі
+        $sliderItems = $this->getSliders();
+        $sliders = view(env('THEME').'.slider')->with('sliders', $sliderItems)->render();
+        $this->vars = array_add($this->vars, 'sliders', $sliders);
         return $this->renderOutput();
     }
 
+    public function getSliders()
+    {
+        $sliders = $this->s_rep->get();
+
+        if ($sliders->isEmpty()) {
+            return false;
+        }
+
+        // функція, яка буде застосована для кожного елемента
+        $sliders->transform(function ($item, $key) {
+            $item->img = Config::get('settings.slider_path').'/'.$item->img;
+            return $item;
+        });
+
+        return $sliders;
+    }
     /**
      * Show the form for creating a new resource.
      *
