@@ -17,3 +17,10 @@ Route::resource('/', 'IndexController', [
         'index' => 'home'
     ]
 ]);
+
+// нова група для портфоліо
+Route::resource('portfolios', 'PortfolioController',[
+    'parameters' => [
+        'portfolios' => 'alias'
+    ]
+]);

@@ -2,13 +2,9 @@
     <div id="content-home" class="content group">
         <div class="hentry group">
             <div class="section portfolio">
-
                 <h3 class="title">{{ trans('ru.latest_projects') }}</h3>
-
                 @foreach($portfolios as $k=>$item)
-
                     @if($k==0)
-
                         <div class="hentry work group portfolio-sticky portfolio-full-description">
                             <div class="work-thumbnail">
                                 <a class="thumb"><img src="{{ asset(env('THEME')) }}/images/projects/{{ $item->img->max }}" alt="0081" title="0081" /></a>
@@ -24,19 +20,12 @@
                                 <a href="{{ route('portfolios.show',['alias' => $item->alias])}}" class="read-more">|| Read more</a>
                             </div>
                         </div>
-
                         <div class="clear"></div>
-
                         @continue
                     @endif
-
-
-
-
                     @if($k == 1)
                         <div class="portfolio-projects">
-                            @endif
-
+                    @endif
                             <div class="related_project {{ ($k==4) ? ' related_project_last' : ''}}">
                                 <div class="overlay_a related_img">
                                     <div class="overlay_wrapper">
@@ -51,8 +40,6 @@
                                 <h4><a href="{{ route('portfolios.show',['alias' => $item->alias])}}">{{ $item->title }}</a></h4>
                                 <p>{{ str_limit($item->text,200) }}</p>
                             </div>
-
-
                             @endforeach
                         </div>
             </div>
@@ -66,4 +53,3 @@
 @else
     <p>Нет</p>
 @endif
-
