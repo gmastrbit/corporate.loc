@@ -2,12 +2,16 @@
 
 @section('navigation')
     {!! $navigation !!}
-@endsection()
+@endsection
 
 @section('slider')
     {!! $sliders !!}
-@endsection()
+@endsection
 
 @section('content')
     {!! $content !!}
-@endsection()
+@endsection
+
+@section('bar')
+    {!! $rightBar !!}
+@endsection
