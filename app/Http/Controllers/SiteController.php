@@ -26,6 +26,10 @@ class SiteController extends Controller
     // необхідний для роботи з пунктами меню
     protected $m_rep;
 
+    protected $keywords;
+    protected $meta_desc;
+    protected $title;
+
     protected $template;
 
     // масив передаваних змінних у шаблон
@@ -36,7 +40,7 @@ class SiteController extends Controller
     protected $contentLeftBar = false;
 
     // сайдбар
-    protected $bar = false;
+    protected $bar = 'no';
 
     public function __construct(MenusRepository $m_rep)
     {
@@ -52,6 +56,17 @@ class SiteController extends Controller
             $rightBar = view(env('THEME').'.rightBar')->with('content_rightBar', $this->contentRightBar)->render();
             $this->vars = array_add($this->vars, 'rightBar', $rightBar);
         }
+
+        // передача інформації про сайдбар
+        $this->vars = array_add($this->vars, 'bar', $this->bar);
+
+        $this->vars = array_add($this->vars, 'keywords', $this->keywords);
+        $this->vars = array_add($this->vars, 'meta_desc', $this->meta_desc);
+        $this->vars = array_add($this->vars, 'title', $this->title);
+
+        // формування футера
+        $footer = view(env('THEME').'.footer')->render();
+        $this->vars = array_add($this->vars, 'footer', $footer);
 
         return view($this->template)->with($this->vars);
     }
