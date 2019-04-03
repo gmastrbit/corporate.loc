@@ -22,17 +22,28 @@ class ArticlesController extends SiteController
         $this->template = env('THEME').'.articles';
     }
 
-    public function index()
+    public function index($cat_alias = FALSE)
     {
-        $articles = $this->getArticles();
+        $this->title = 'Блог';
+        $this->keywords = 'String';
+        $this->meta_desc = 'String';
 
-        // формує вигляд, який буде доступний користувачу
+        $articles = $this->getArticles($cat_alias);
+
+        $content = view(env('THEME').'.articles_content')->with('articles',$articles)->render();
+        $this->vars = array_add($this->vars,'content',$content);
+
+        $comments = $this->getComments(config('settings.recent_comments'));
+        $portfolios = $this->getPortfolios(config('settings.recent_portfolios'));
+
+        $this->contentRightBar = view(env('THEME').'.articlesBar')->with(['comments' => $comments,'portfolios' => $portfolios]);
+
         return $this->renderOutput();
     }
 
     public function getArticles($alias = false)
     {
-        $articles = $this->a_rep->get(['title', 'alias', 'created_at', 'img', 'desc'], false, true);
+        $articles = $this->a_rep->get(['id', 'title', 'alias', 'created_at', 'img', 'desc', 'user_id', 'category_id'], false, true);
         if ($articles) {
             // дозволяє підвантажити записи із пов'язаних зв'язками таблиць
 //            $articles->load('user', 'category', 'comments');
