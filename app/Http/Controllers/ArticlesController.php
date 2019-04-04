@@ -2,28 +2,34 @@
 
 namespace Corp\Http\Controllers;
 
-use Corp\Repositories\ArticlesRepository;
-use Corp\Repositories\PortfoliosRepository;
 use Illuminate\Http\Request;
+use Corp\Repositories\PortfoliosRepository;
+use Corp\Repositories\ArticlesRepository;
+use Corp\Repositories\CommentsRepository;
 use Corp\Http\Requests;
+use Corp\Category;
 
 class ArticlesController extends SiteController
 {
-    public function __construct(PortfoliosRepository $p_rep, ArticlesRepository $a_rep)
-    {
+
+    public function __construct(PortfoliosRepository $p_rep, ArticlesRepository $a_rep, CommentsRepository $c_rep) {
+
         parent::__construct(new \Corp\Repositories\MenusRepository(new \Corp\Menu));
 
         $this->p_rep = $p_rep;
         $this->a_rep = $a_rep;
+        $this->c_rep = $c_rep;
 
-        // визначає, де буде сайдбар
         $this->bar = 'right';
 
         $this->template = env('THEME').'.articles';
+
     }
 
     public function index($cat_alias = FALSE)
     {
+        //
+
         $this->title = 'Блог';
         $this->keywords = 'String';
         $this->meta_desc = 'String';
@@ -41,13 +47,39 @@ class ArticlesController extends SiteController
         return $this->renderOutput();
     }
 
-    public function getArticles($alias = false)
-    {
-        $articles = $this->a_rep->get(['id', 'title', 'alias', 'created_at', 'img', 'desc', 'user_id', 'category_id'], false, true);
-        if ($articles) {
-            // дозволяє підвантажити записи із пов'язаних зв'язками таблиць
-//            $articles->load('user', 'category', 'comments');
+    public function getComments($take) {
+
+        $comments = $this->c_rep->get(['text','name','email','site','article_id','user_id'],$take);
+
+        if($comments) {
+            $comments->load('article','user');
         }
+
+        return $comments;
+    }
+
+    public function getPortfolios($take) {
+        $portfolios = $this->p_rep->get(['title','text','alias','customer','img','filter_alias'],$take);
+        return $portfolios;
+    }
+
+    public function getArticles($alias = FALSE) {
+
+        $where = FALSE;
+
+        if($alias) {
+            // WHERE `alias` = $alias
+            $id = Category::select('id')->where('alias',$alias)->first()->id;
+            //WHERE `category_id` = $id
+            $where = ['category_id',$id];
+        }
+
+        $articles = $this->a_rep->get(['id','title','alias','created_at','img','desc','user_id','category_id','keywords','meta_desc'],FALSE,TRUE,$where);
+
+        if($articles) {
+            $articles->load('user','category','comments');
+        }
+
         return $articles;
     }
 }
