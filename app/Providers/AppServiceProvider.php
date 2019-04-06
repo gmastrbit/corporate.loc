@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 
 use Blade;
 
+use DB;
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -15,11 +18,24 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // створення власної директиви
-        Blade::directive('set', function ($exp) {
-            list($name, $val) = explode(',', $exp);
-            return "<?php $name = $val ?>";
+        //
+        //  @set($i,10)
+        Blade::directive('set',function($exp) {
+        	
+        	list($name,$val) = explode(',',$exp);
+        	
+        	return "<?php $name = $val ?>";
+        	
         });
+        
+        DB::listen(function($query) {
+        	
+        	//echo '<h1>'.$query->sql.'</h1>';
+        	
+        });
+        
+  
+        
     }
 
     /**

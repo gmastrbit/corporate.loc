@@ -11,24 +11,62 @@
 |
 */
 
-Route::resource('/', 'IndexController', [
-    'only' => ['index'],
-    'names' => [
-        'index' => 'home'
-    ]
-]);
+Route::resource('/','IndexController',[
+									'only' =>['index'],
+									'names' => [
+										'index'=>'home'
+									]
+									]);								
 
-// нова група для портфоліо
-Route::resource('portfolios', 'PortfolioController',[
-    'parameters' => [
-        'portfolios' => 'alias'
-    ]
-]);
+Route::resource('portfolios','PortfolioController',[
+													
+													'parameters' => [
+													
+														'portfolios' => 'alias'
+													
+													]
+													
+													]);
 
-Route::resource('articles', 'ArticlesController',[
-    'parameters' => [
-        'articles' => 'alias'
-    ]
-]);
+Route::resource('articles','ArticlesController',[
+												
+												'parameters'=>[
+												
+													'articles' => 'alias'
+												
+												]
+												
+												]);	
+Route::get('articles/cat/{cat_alias?}',['uses'=>'ArticlesController@index','as'=>'articlesCat'])->where('cat_alias','[\w-]+');   
 
-Route::get('articles/cat/{cat_alias?}', ['uses' => 'ArticleController@index', 'as' => 'articlesCat']);
+
+Route::resource('comment','CommentController',['only'=>['store']]);
+
+Route::match(['get','post'],'/contacts',['uses'=>'ContactsController@index','as'=>'contacts']);
+
+//php artisan make:auth
+Route::get('login','Auth\AuthController@showLoginForm');
+
+Route::post('login','Auth\AuthController@login');
+
+Route::get('logout','Auth\AuthController@logout');
+
+
+//admin
+Route::group(['prefix' => 'admin','middleware'=> 'auth'],function() {
+	
+	//admin
+	Route::get('/',['uses' => 'Admin\IndexController@index','as' => 'adminIndex']);
+	
+	// articles
+	Route::resource('/articles','Admin\ArticlesController');
+	
+	Route::resource('/permissions','Admin\PermissionsController');
+	
+	Route::resource('/menus','Admin\MenusController');
+	
+});
+
+
+
+																						
