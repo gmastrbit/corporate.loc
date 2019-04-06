@@ -1,6 +1,8 @@
 <div id="content-blog" class="content group">
 				            @if($articles)
+				            
 				            @foreach($articles as $article)
+				            
 					            <div class="sticky hentry hentry-post blog-big group">
 					                <!-- post featured & title -->
 					                <div class="thumbnail">
@@ -28,12 +30,19 @@
 					                </div>
 					                <div class="clear"></div>
 					            </div>
+				            
 				            @endforeach
+				            
+				            
+
 				            <div class="general-pagination group">
-				            	@if($articles->lastPage() > 1)
+				            
+				            	@if($articles->lastPage() > 1) 
+				            		
 				            		@if($articles->currentPage() !== 1)
 				            			<a href="{{ $articles->url(($articles->currentPage() - 1)) }}">{{ Lang::get('pagination.previous') }}</a>
 				            		@endif
+				            		
 				            		@for($i = 1; $i <= $articles->lastPage(); $i++)
 				            			@if($articles->currentPage() == $i)
 				            				<a class="selected disabled">{{ $i }}</a>
@@ -41,12 +50,18 @@
 				            				<a href="{{ $articles->url($i) }}">{{ $i }}</a>
 				            			@endif		
 				            		@endfor
+				            		
 				            		@if($articles->currentPage() !== $articles->lastPage())
 				            			<a href="{{ $articles->url(($articles->currentPage() + 1)) }}">{{ Lang::get('pagination.next') }}</a>
 				            		@endif
+				            		
+				            	
 				            	@endif
+				           
 				            </div>
 			@else
+			
 				{!! Lang::get('ru.articles_no') !!}
+			
 			@endif	            
 				        </div>

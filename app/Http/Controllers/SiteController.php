@@ -12,79 +12,95 @@ use Menu;
 
 class SiteController extends Controller
 {
-    // властивість для збереження об'єкту класу Portfolio репозиторій
-    // даний клас буде використовуватися для збереження логіки по роботі з портфоліо
+    //
+    
     protected $p_rep;
-
-    // буде зберігатися об'єкт класу Slider репозиторій
-    // буде збережена логіка роботи зі слайдером
     protected $s_rep;
-
-    // логіка по роботі зі статтями
     protected $a_rep;
-
-    // необхідний для роботи з пунктами меню
     protected $m_rep;
-
+    protected $c_rep;
+    
     protected $keywords;
-    protected $meta_desc;
-    protected $title;
+	protected $meta_desc;
+	protected $title;
+    
+    protected $temlate;
+    
+    protected $vars = array();
 
-    protected $template;
-
-    // масив передаваних змінних у шаблон
-    protected $vars = [];
-
-    // інформація про сайдбари
-    protected $contentRightBar = false;
-    protected $contentLeftBar = false;
-
-    // сайдбар
+    protected $contentRightBar = FALSE;
+	protected $contentLeftBar = FALSE;
+	
+    
     protected $bar = 'no';
-
-    public function __construct(MenusRepository $m_rep)
-    {
-        $this->m_rep = $m_rep;
-    }
-
-    protected function renderOutput(){
-        $menu = $this->getMenu();
-        $navigation = view(env('THEME').'.navigation')->with('menu', $menu)->render();
-        $this->vars = array_add($this->vars, 'navigation', $navigation);
-
-        if ($this->contentRightBar) {
-            $rightBar = view(env('THEME').'.rightBar')->with('content_rightBar', $this->contentRightBar)->render();
-            $this->vars = array_add($this->vars, 'rightBar', $rightBar);
-        }
-
-        // передача інформації про сайдбар
-        $this->vars = array_add($this->vars, 'bar', $this->bar);
-
-        $this->vars = array_add($this->vars, 'keywords', $this->keywords);
-        $this->vars = array_add($this->vars, 'meta_desc', $this->meta_desc);
-        $this->vars = array_add($this->vars, 'title', $this->title);
-
-        // формування футера
-        $footer = view(env('THEME').'.footer')->render();
-        $this->vars = array_add($this->vars, 'footer', $footer);
-
-        return view($this->template)->with($this->vars);
-    }
-
-    protected function getMenu(){
-        $menu = $this->m_rep->get();
-        $mBuilder = Menu::make('MyNav', function($m) use ($menu){
-            // функція колбек додасть у меню необхідні пункти
-            foreach ($menu as $item) {
-                if ($item->parent == 0) {
-                    $m->add($item->title, $item->path)->id($item->id);
-                } else {
-                    if ($m->find($item->parent)) {
-                        $m->find($item->parent)->add($item->title, $item->path)->id($item->id);
-                    }
-                }
-            }
-        });
-        return $mBuilder;
-    }
+    
+    
+    public function __construct(MenusRepository $m_rep) {
+		$this->m_rep = $m_rep;
+	}
+	
+	
+	protected function renderOutput() {
+		
+		
+		$menu = $this->getMenu();
+		
+		//dd($menu);
+		
+		$navigation = view(env('THEME').'.navigation')->with('menu',$menu)->render();
+		$this->vars = array_add($this->vars,'navigation',$navigation);
+		
+		if($this->contentRightBar) {
+			$rightBar = view(env('THEME').'.rightBar')->with('content_rightBar',$this->contentRightBar)->render();
+			$this->vars = array_add($this->vars,'rightBar',$rightBar);
+		}
+		
+		if($this->contentLeftBar) {
+			$leftBar = view(env('THEME').'.leftBar')->with('content_leftBar',$this->contentLeftBar)->render();
+			$this->vars = array_add($this->vars,'leftBar',$leftBar);
+		}
+		
+		$this->vars = array_add($this->vars,'bar',$this->bar);
+		
+		
+		$this->vars = array_add($this->vars,'keywords',$this->keywords);
+		$this->vars = array_add($this->vars,'meta_desc',$this->meta_desc);
+		$this->vars = array_add($this->vars,'title',$this->title);
+		
+		
+		
+		$footer = view(env('THEME').'.footer')->render();
+		$this->vars = array_add($this->vars,'footer',$footer);
+		
+		return view($this->template)->with($this->vars);
+	}
+	
+	public function getMenu() {
+		
+		$menu = $this->m_rep->get();
+		
+		
+		
+		$mBuilder = Menu::make('MyNav', function($m) use ($menu) {
+			
+			foreach($menu as $item) {
+				
+				if($item->parent == 0) {
+					$m->add($item->title,$item->path)->id($item->id);
+				}
+				else {
+					if($m->find($item->parent)) {
+						$m->find($item->parent)->add($item->title,$item->path)->id($item->id);
+					}
+				}
+			}
+			
+		});
+		
+		//dd($mBuilder);
+		
+		return $mBuilder;
+	}	
+    
+    
 }
